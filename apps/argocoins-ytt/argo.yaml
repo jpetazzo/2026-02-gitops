@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: simple-app
+  namespace: argocd
+spec:
+  project: default
+  syncPolicy:
+    automated: {}
+  source:
+    repoURL: https://github.com/jpetazzo/2026-02-gitops
+    targetRevision: main
+    path: apps/argocoins-ytt/ytt
+    plugin:
+      name: ytt
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocoins-ytt
