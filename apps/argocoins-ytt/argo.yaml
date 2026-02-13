@@ -7,12 +7,14 @@ spec:
   project: default
   syncPolicy:
     automated: {}
+    syncOptions:
+    - CreateNamespace=true
   source:
     repoURL: https://github.com/jpetazzo/2026-02-gitops
     targetRevision: main
     path: apps/argocoins-ytt/ytt
     plugin:
-      name: ytt
+      name: ytt-v1.0
   destination:
     server: https://kubernetes.default.svc
     namespace: argocoins-ytt
