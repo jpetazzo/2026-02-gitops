@@ -6,3 +6,4 @@ resources:
 - ../../../apps/blue/flux.yaml
 - ../../../apps/dockercoins/flux.yaml
 - ../../../apps/fluxhelmcoins-1/flux.yaml
+- ../../../apps/fluxhelmcoins-2/flux.yaml
