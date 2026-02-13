@@ -1,0 +1,55 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:template", "template")
+---
+#@ def labels(name):
+app: #@ name
+deployed-with: ytt
+author: jpetazzo
+#@ end
+---
+#@ def Deployment(name, image=None, replicas=1):
+#@ if image==None:
+#@   image=data.values.registry+"/"+name+":"+data.values.tag
+#@ end
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: #@ labels(name)
+  name: #@ name
+spec:
+  replicas: #@ replicas
+  selector:
+    matchLabels:
+      app: #@ name
+  template:
+    metadata:
+      labels: #@ labels(name)
+    spec:
+      containers:
+      - image: #@ image
+        name: #@ name
+#@ end
+---
+#@ def Service(name, port=80, type="ClusterIP"):
+apiVersion: v1
+kind: Service
+metadata:
+  labels: #@ labels(name)
+  name: #@ name
+spec:
+  ports:
+  - port: #@ port
+  selector: #@ labels(name)
+  type: #@ type
+#@ end
+---
+#@ def Component(name, port=None, type="ClusterIP", image=None, replicas=1):
+--- #@ Deployment(name, image, replicas)
+#@ if port:
+--- #@ Service(name, port, type)
+#@ end
+#@ end
+---
+#@ for component in data.values.components:
+--- #@ template.replace(Component(component, **data.values.components[component]))
+#@ end

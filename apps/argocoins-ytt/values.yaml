@@ -1,0 +1,17 @@
+#@data/values-schema
+---
+registry: dockercoins
+tag: v0.1
+components:
+  hasher:
+    port: 80
+  rng:
+    port: 80
+  redis:
+    port: 6379
+    image: redis
+  worker:
+    replicas: 10
+  webui:
+    port: 80
+    type: NodePort
